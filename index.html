@@ -1,6 +1,49 @@
 <html>
-	<head><title>Home Page</title></head>
+	<head>
+		<title>Home Page</title>
+		<script type = "text/javascript">
+			var canavs;
+			var ctx; //canvas context
+			var canvasWidth;
+			var canvasHeight;
+			var rows = 50;//should probably be set by server
+			var cols = 100;//should probably be set by server
+			var gameButtons; //2d array for game buttons
+			var tileWidth;
+			var tileHeight;	
+
+			function initGame(){
+				//set global variabls, and draw game. Cannot b
+				//be called before page loaded
+				canvas = document.getElementById('gameCanvas');
+				ctx = canvas.getContext("2d");
+				//ctx.fillRect(100,0,150,150);
+				ctx.fillStyle = "#aabbee";
+				canvasWidth = canvas.width;
+				canvasHeight = canvas.height;
+				tileWidth = canvasWidth / cols;
+				tileHeight = canvasHeight / rows;
+				gameButtons = [];
+				for(var r = 0; r < rows; r++){
+					for(var c = 0; c < cols; c++){
+						gameButtons[r] = {xPos:c*tileWidth,yPos:r * tileHeight,toggled:true};
+						if(r%2==0)
+							gameButtons[r]["toggled"] = false;
+						if(gameButtons[r].toggled == false)
+							ctx.fillStyle = "#ff0000";
+						else
+							ctx.fillStyle = "#0000ff";
+						ctx.fillRect(c * tileWidth,r * tileHeight,tileWidth * .9,tileHeight * .9);
+					}
+				}
+			}
+			function tileClick(){
+				
+			}
+		</script>
+	</head>
 	<body>
-		Home Page
+		<canvas id = "gameCanvas" width = "1600" height = "800"></canvas>
+		<input type = "Button" onclick = "initGame()" value = "start"/>
 	</body>
 </html>
