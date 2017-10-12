@@ -17,6 +17,10 @@
 				//be called before page loaded
 				canvas = document.getElementById('gameCanvas');
 				ctx = canvas.getContext("2d");
+				canvas.addEventListener('click',function(e){
+					tileClick(e.clientX - canvas.offsetLeft,e.clientY - canvas.offsetTop);	
+					//alert("X: " + e.clientX + " Y: " + e.clientY);
+				});
 				//ctx.fillRect(100,0,150,150);
 				ctx.fillStyle = "#aabbee";
 				canvasWidth = canvas.width;
@@ -25,11 +29,10 @@
 				tileHeight = canvasHeight / rows;
 				gameButtons = [];
 				for(var r = 0; r < rows; r++){
+					gameButtons[r] = [];
 					for(var c = 0; c < cols; c++){
-						gameButtons[r] = {xPos:c*tileWidth,yPos:r * tileHeight,toggled:true};
-						if(r%2==0)
-							gameButtons[r]["toggled"] = false;
-						if(gameButtons[r].toggled == false)
+						gameButtons[r][c] = {xPos:c*tileWidth,yPos:r * tileHeight,toggled:false};
+						if(gameButtons[r][c].toggled == false)
 							ctx.fillStyle = "#ff0000";
 						else
 							ctx.fillStyle = "#0000ff";
@@ -37,8 +40,33 @@
 					}
 				}
 			}
-			function tileClick(){
-				
+			function tileClick(xClick,yClick){
+				for(var r = 0; r < rows; r++){
+					if(yClick > gameButtons[r][0].yPos){
+						if(yClick < gameButtons[r+1][0].yPos){//clicked the currentRow
+							for(var c = 0; c < cols; c++){
+								if(xClick > gameButtons[r][c].xPos){
+									if(xClick < gameButtons[r][c+1].xPos){
+										gameButtons[r][c].toggled = !gameButtons[r][c].toggled;
+									}
+								}
+							}
+						}
+					}
+				}
+				drawGrid();
+			}
+			function drawGrid(){
+				for(var r = 0; r < rows; r++){
+					for(var c = 0; c < cols; c++){
+						if(gameButtons[r][c].toggled == false)
+							ctx.fillStyle = "#ff0000";
+						else
+							ctx.fillStyle = "#0000ff";
+						ctx.fillRect(c * tileWidth,r * tileHeight,tileWidth * .9,tileHeight * .9);
+					}
+				}
+
 			}
 		</script>
 	</head>
