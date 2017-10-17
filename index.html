@@ -1,0 +1,119 @@
+<html>
+	<head>
+		<title>Home Page</title>
+		<script type = "text/javascript">
+			var canavs;
+			var ctx; //canvas context
+			var canvasWidth;
+			var canvasHeight;
+			var rows;//should probably be set by server
+			var cols;//should probably be set by server
+			var gameButtons; //2d array for game buttons
+			var tileWidth;
+			var tileHeight;	
+
+			function initGame(){
+				//set global variabls, and draw game. Cannot b
+				//be called before page loaded
+				getSettings();
+				canvas = document.getElementById('gameCanvas');
+				ctx = canvas.getContext("2d");
+				canvas.addEventListener('click',function(e){
+					tileClick(e.clientX - canvas.offsetLeft,e.clientY - canvas.offsetTop);	
+					//alert("X: " + e.clientX + " Y: " + e.clientY);
+				});
+				//ctx.fillRect(100,0,150,150);
+				ctx.fillStyle = "#aabbee";
+				canvasWidth = canvas.width;
+				canvasHeight = canvas.height;
+				tileWidth = canvasWidth / cols;
+				tileHeight = canvasHeight / rows;
+				gameButtons = [];
+			/*	
+				for(var r = 0; r < rows; r++){
+					gameButtons[r] = [];
+					for(var c = 0; c < cols; c++){
+						gameButtons[r][c] = {xPos:c*tileWidth,yPos:r * tileHeight,toggled:false};
+						if(gameButtons[r][c].toggled == false)
+							ctx.fillStyle = "#ff0000";
+						else
+							ctx.fillStyle = "#0000ff";
+						ctx.fillRect(c * tileWidth,r * tileHeight,tileWidth * .9,tileHeight * .9);
+					}
+				}
+			*/	
+				
+				getGrid();
+			}
+			function tileClick(xClick,yClick){
+				for(var r = 0; r < rows; r++){
+					if(yClick > gameButtons[r][0].yPos){
+						if(r == rows -1 || yClick < gameButtons[r+1][0].yPos){//clicked the currentRow
+							for(var c = 0; c < cols; c++){
+								if(xClick > gameButtons[r][c].xPos){
+									if(c == cols - 1 || xClick < gameButtons[r][c+1].xPos){
+										gameButtons[r][c].toggled = !gameButtons[r][c].toggled;
+										pushChange(c,r);
+									}
+								}
+							}
+						}
+					}
+				}
+				drawGrid();
+			}
+			function drawGrid(){
+				for(var r = 0; r < rows; r++){
+					for(var c = 0; c < cols; c++){
+						if(gameButtons[r][c].toggled == false)
+							ctx.fillStyle = "#ff0000";
+						else
+							ctx.fillStyle = "#0000ff";
+						ctx.fillRect(c * tileWidth,r * tileHeight,tileWidth * .9,tileHeight * .9);
+					}
+				}
+
+			}
+			function getGrid(){
+				var xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function(){
+					if(this.readyState == 4 && this.status == 200){
+						gameButtons = JSON.parse(xhttp.responseText);
+						for(var r = 0; r < gameButtons.length; r++){
+							for(var c = 0; c < gameButtons[r].length; c++){
+								gameButtons[r][c].xPos = c * tileWidth;
+								gameButtons[r][c].yPos = r * tileHeight; 
+							}
+						}
+						drawGrid();
+					}
+				};
+				xhttp.open("GET","getGrid.php",false);
+				xhttp.send();
+			}
+			function getSettings(){
+				var xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function(){
+					if(this.readyState == 4 && this.status == 200){
+						cols = (JSON.parse(xhttp.responseText).xCord) + 1; // add one for 0 indexing
+						rows = (JSON.parse(xhttp.responseText).yCord) + 1; //add one for 0 indexing
+					}
+				}
+				xhttp.open("GET","getSettings.php",false);
+				xhttp.send();
+			}
+			function pushChange(x,y){
+				xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function(){
+				
+				}
+				xhttp.open("POST","pushToQueue.php",true);
+				xhttp.send("xCord=" + x + "&yCord="+y);
+			}
+		</script>
+	</head>
+	<body>
+		<canvas id = "gameCanvas" width = "1600" height = "800"></canvas>
+		<input type = "Button" onclick = "initGame()" value = "start"/>
+	</body>
+</html>

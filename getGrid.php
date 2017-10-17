@@ -4,8 +4,8 @@
 
 	$sql = "SELECT * FROM GameMap";
 
-	$rows = 5;
-	$cols = 5;
+	$rows = 2;
+	$cols = 2;
 
 	$gameRows = array();
 	
