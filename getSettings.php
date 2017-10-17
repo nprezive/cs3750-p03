@@ -12,12 +12,12 @@
         $con = new mysqli($login->host,$login->username,$login->password,$login->db);
         if(!$con)
         {
-            echo mysqli_error();
+            echo mysqli_error($con);
         }
 		$result=mysqli_query($con,"SELECT MAX(xCord) AS maxX FROM GameMap");
         if(!$result)
         {
-            echo mysql_error();
+            echo mysqli_error($con);
         }
 		echo "{\"xCord\":";
 		echo $result->fetch_object()->maxX;
@@ -25,7 +25,7 @@
 		$result=mysqli_query($con,"SELECT MAX(yCord) AS maxY FROM GameMap");
         if(!$result)
         {
-            echo mysql_error();
+            echo mysqli_error($con);
         }
 		
 		echo $result->fetch_object()->maxY;
