@@ -3,31 +3,25 @@
 	$login = new Connection;
 	$xToggle = $POST_['xCord']; //int representing x cordinate to toggle
 	$yToggle = $POST_['yCord']; //int representing y cordinate to toggle
-	$n->connect();
-	$n->insert($xToggle, $yToggle);
+	connect($xToggle, $yToggle);
 	
 
-class db
-{
-    public $con;
+    $con;
 	   
-    public function connect()
+    function connect($xToggle, $yToggle)
     {
-        $this->con = new mysqli($login->host,$login->username,$login->password,$login->db);
-        if(!$this->con)
+		global $login;
+        $con = new mysqli($login->host,$login->username,$login->password,$login->db);
+        if(!$con)
         {
-            echo mysqli_error();
+            echo mysqli_error($con);
         }
 
-    }
-    public function insert($xToggle,$yToggle)
-    {
-        $sql=mysqli_query($this->con,"INSERT INTO CommitQueue(xCord, yCord) VALUES('$xToggle', '$yToggle')");
+        $sql=mysqli_query($con,"INSERT INTO CommitQueue(xCord, yCord) VALUES('$xToggle', '$yToggle')");
         if(!$sql)
         {
-            echo mysql_error();
+            echo mysqli_error($con);
         }
     }
-}
 	
 ?>
