@@ -29,6 +29,7 @@
 				tileWidth = canvasWidth / cols;
 				tileHeight = canvasHeight / rows;
 				gameButtons = [];
+				setInterval(getGrid,3000);
 			/*	
 				for(var r = 0; r < rows; r++){
 					gameButtons[r] = [];
@@ -88,7 +89,7 @@
 						drawGrid();
 					}
 				};
-				xhttp.open("GET","getGrid.php",false);
+				xhttp.open("GET","getGrid.php",true);
 				xhttp.send();
 			}
 			function getSettings(){
@@ -107,7 +108,9 @@
 				xhttp.onreadystatechange = function(){
 				
 				}
+				
 				xhttp.open("POST","pushToQueue.php",true);
+				xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 				xhttp.send("xCord=" + x + "&yCord="+y);
 			}
 		</script>
