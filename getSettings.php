@@ -3,7 +3,7 @@
 
 <?php
 	//return settings
-	require 'Connection.php';
+	require_once 'Connection.php';
 	$login = new Connection;
 	connect();
 	
