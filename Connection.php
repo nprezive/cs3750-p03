@@ -2,10 +2,10 @@
 
 class Connection{
 	
-	public $username = "W01032446";
+	public $username = "root";
 	public $host = "localhost";
-	public $db = "W01032446";
-	public $password = "Jacobcs!";
+	public $db = "CS3750P03";
+	public $password = "picklerick";
 }
 
 ?>
