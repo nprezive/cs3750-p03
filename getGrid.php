@@ -1,11 +1,18 @@
 <?php
+
 	require 'Connection.php';
 	$login = new Connection;
 
 	$sql = "SELECT * FROM GameMap";
-
-	$rows = 2;
-	$cols = 2;
+	
+	//get max xCord and yCord
+	ob_start();
+	require('getSettings.php');
+	$json_output = ob_get_clean();
+	$obj = json_decode($json_output);
+	//store max x and y into variables
+	$rows = $obj->{'yCord'};
+	$cols = $obj->{'xCord'};
 
 	$gameRows = array();
 	
@@ -36,5 +43,5 @@
 		public $yCord;
 		public $toggled;
 	}
-	
+
 ?>
