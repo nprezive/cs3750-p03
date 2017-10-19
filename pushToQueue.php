@@ -1,8 +1,8 @@
 <?php
 	require 'Connection.php';
 	$login = new Connection;
-	$xToggle = $POST_['xCord']; //int representing x cordinate to toggle
-	$yToggle = $POST_['yCord']; //int representing y cordinate to toggle
+	$xToggle = $POST_['xCord']; 
+	$yToggle = $POST_['yCord']; 
 	connect($xToggle, $yToggle);
 	
 
@@ -24,4 +24,4 @@
         }
     }
 	
-?>
+?>	
