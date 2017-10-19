@@ -11,8 +11,8 @@
 	$json_output = ob_get_clean();
 	$obj = json_decode($json_output);
 	//store max x and y into variables
-	$rows = $obj->{'yCord'};
-	$cols = $obj->{'xCord'};
+	$rows = $obj->{'yCord'} + 1;
+	$cols = $obj->{'xCord'} + 1;
 
 	$gameRows = array();
 	
