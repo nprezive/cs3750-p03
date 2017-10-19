@@ -1,10 +1,9 @@
 <?php
 	require 'Connection.php';
 	$login = new Connection;
-	$xToggle = $POST_['xCord']; 
-	$yToggle = $POST_['yCord']; 
-	connect($xToggle, $yToggle);
-	
+	$xToggle = $_POST['xCord']; 
+	$yToggle = $_POST['yCord']; 
+	connect($xToggle, $yToggle);	
 
     $con;
 	   
