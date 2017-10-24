@@ -29,7 +29,7 @@
 				tileWidth = canvasWidth / cols;
 				tileHeight = canvasHeight / rows;
 				gameButtons = [];
-				setInterval(getGrid,3000);
+				setInterval(getGrid,1000);
 			/*	
 				for(var r = 0; r < rows; r++){
 					gameButtons[r] = [];
@@ -64,6 +64,7 @@
 				drawGrid();
 			}
 			function drawGrid(){
+				canvas.getContext("2d").clearRect(0,0,canvas.width,canvas.height);	
 				for(var r = 0; r < rows; r++){
 					for(var c = 0; c < cols; c++){
 						if(gameButtons[r][c].toggled == false)
