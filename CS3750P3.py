@@ -3,8 +3,12 @@
 import MySQLdb 
 import time
 
-X_SIZE = 100
+X_SIZE = 50
 Y_SIZE = 50
+gHost = "localhost"
+gUser = "root"
+gPasswd = "picklerick"
+gDb = "CS3750P03"
 
 
 # Returns a two dimensional array
@@ -14,10 +18,10 @@ def getCurrentGrid():
 	gameMap = [[0 for y in range(Y_SIZE + 2)] for x in range(X_SIZE + 2)]
 
 	# create connection to db
-	db = MySQLdb.connect(host="localhost",
-						user="W01252364",
-						passwd="Noahcs!",
-						db="W01252364")
+	db = MySQLdb.connect(host=gHost,
+						user=gUser,
+						passwd=gPasswd,
+						db=gDb)
 
 	# Query the GameMap, populate the table
 	cur = db.cursor()
@@ -92,12 +96,16 @@ def printMap(gameMap):
 
 def writeMapToDB(gameMap):
 	# create connection to db
-	conn = MySQLdb.connect(host="localhost",
-						user="W01252364",
-						passwd="Noahcs!",
-						db="W01252364")
+	conn = MySQLdb.connect(host=gHost,
+						user=gUser,
+						passwd=gPasswd,
+						db=gDb)
 	# create cursor
 	cur = conn.cursor()
+
+	sql = 'DELETE FROM GameMap;'
+	cur.execute(sql)
+	conn.commit()
 
 	for x in range(1, X_SIZE+1):
 		for y in range(1, Y_SIZE+1):
@@ -112,10 +120,10 @@ def writeMapToDB(gameMap):
 
 def initializeTable(gameMap):
 	# create connection to db
-	conn = MySQLdb.connect(host="localhost",
-						user="W01252364",
-						passwd="Noahcs!",
-						db="W01252364")
+	conn = MySQLdb.connect(host=gHost,
+						user=gUser,
+						passwd=gPasswd,
+						db=gDb)
 	# create cursor
 	cur = conn.cursor()
 
@@ -132,10 +140,10 @@ def initializeTable(gameMap):
 
 def applyChangeQueue(gameMap):
 	# create connection to db
-	db = MySQLdb.connect(host="localhost",
-						user="W01252364",
-						passwd="Noahcs!",
-						db="W01252364")
+	db = MySQLdb.connect(host=gHost,
+						user=gUser,
+						passwd=gPasswd,
+						db=gDb)
 
 	# Query the change queue
 	usedQueueIDs = []
@@ -164,8 +172,11 @@ def applyChangeQueue(gameMap):
 
 
 newmap = getCurrentGrid()
+timer = time.time()
 while True:
-	newmap = iterateGameOfLife(newmap)
 	newmap = applyChangeQueue(newmap)
 	writeMapToDB(newmap)
-	time.sleep(3)	
+
+	if time.time() > timer + 3:
+		newmap = iterateGameOfLife(newmap)
+		timer = time.time()
