@@ -103,15 +103,26 @@ def writeMapToDB(gameMap):
 	# create cursor
 	cur = conn.cursor()
 
-	sql = 'DELETE FROM GameMap;'
-	cur.execute(sql)
-	conn.commit()
+	#sql = 'DELETE FROM GameMap;'
+	#cur.execute(sql)
+	#conn.commit()
+
+	updateAlive = "UPDATE GameMap SET CellAlive = 1 WHERE (1 = 0)"
+	updateDead = "UPDATE GameMap SET CellAlive = 0 WHERE (1 = 0)"
 
 	for x in range(1, X_SIZE+1):
 		for y in range(1, Y_SIZE+1):
-			sql = 'INSERT INTO GameMap (xCord, yCord, cellAlive) VALUES ({}, {}, {});'.format(x, y, gameMap[x][y])
-			cur.execute(sql)
-			conn.commit()
+			#sql = 'INSERT INTO GameMap (xCord, yCord, cellAlive) VALUES ({}, {}, {});'.format(x, y, gameMap[x][y])
+			if(gameMap[x][y] == 0):
+				updateDead = updateDead + " OR (xCord = {} AND yCord = {})".format(x,y)
+			else:
+				updateAlive = updateAlive + " OR (xCord = {} AND yCord = {})".format(x,y)
+ 
+			#sql = 'UPDATE GameMap set cellAlive = {} WHERE xCord = {} and yCord = {};'.format(gameMap[x][y], x, y )
+			
+	cur.execute(updateAlive + ";")# + updateDead + ";")
+	cur.execute(updateDead + ";")# + updateDead + ";")
+	conn.commit()
 
 	# Close cursor and connection
 	cur.close()
